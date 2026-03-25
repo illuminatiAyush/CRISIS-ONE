@@ -15,6 +15,9 @@ import { UserRole } from '@/app/types';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -23,6 +26,7 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, title = "Dashboard", subtitle }: DashboardLayoutProps) {
+  const { t } = useLanguage();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const pathname = usePathname();
@@ -52,10 +56,11 @@ export default function DashboardLayout({ children, title = "Dashboard", subtitl
   const getPageTitle = () => {
     if (title !== "Dashboard") return title;
     // Map path to title manually if needed, or just let page set it
-    if (pathname?.includes('/incidents')) return 'Incidents';
-    if (pathname?.includes('/map')) return 'Operations Map';
-    if (pathname?.includes('/analytics')) return 'System Analytics';
-    return "Dashboard";
+    if (pathname?.includes('/incidents')) return t("nav.incidents");
+    if (pathname?.includes('/map')) return t("nav.map");
+    if (pathname?.includes('/analytics')) return t("nav.analytics");
+    if (pathname?.includes('/sub-admins')) return t("nav.agencies");
+    return t("nav.dashboard");
   };
 
   const displayTitle = getPageTitle();
@@ -89,6 +94,22 @@ export default function DashboardLayout({ children, title = "Dashboard", subtitl
           {/* Right: Actions */}
           <div className="flex items-center space-x-4">
 
+            <div className="flex items-center space-x-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">
+                {profile?.full_name || t("common.anonymous")}
+              </p>
+              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em] leading-none">
+                {t(`roles.${profile?.role || 'citizen'}`)}
+              </p>
+            </div>
+
+            <div className="h-6 w-px bg-slate-200 hidden md:block"></div>
+
             {/* Clock */}
             <div className="hidden md:flex items-center space-x-2 text-xs font-mono text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -97,7 +118,7 @@ export default function DashboardLayout({ children, title = "Dashboard", subtitl
 
             {/* Role Badge */}
             <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full border border-blue-100 uppercase tracking-wide">
-              {currentRole}
+              {t(`roles.${currentRole}`)}
             </span>
 
             {/* User Profile */}
@@ -121,14 +142,14 @@ export default function DashboardLayout({ children, title = "Dashboard", subtitl
                     className="absolute top-12 right-0 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 p-2 z-50 origin-top-right"
                   >
                     <div className="px-4 py-3 border-b border-gray-50">
-                      <p className="text-sm font-bold text-gray-900">{profile?.email || 'User'}</p>
-                      <p className="text-xs text-gray-500 truncate">{currentRole}</p>
+                      <p className="text-sm font-bold text-gray-900">{profile?.email || t("common.user")}</p>
+                      <p className="text-xs text-gray-500 truncate">{t(`roles.${currentRole}`)}</p>
                     </div>
 
                     <div className="border-t border-gray-50 pt-2">
                       <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center">
                         <Icon icon="mdi:logout" className="w-4 h-4 mr-2" />
-                        Log Out
+                        {t("nav.logout")}
                       </button>
                     </div>
                   </motion.div>

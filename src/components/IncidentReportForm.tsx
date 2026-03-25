@@ -11,6 +11,7 @@ import { Icon } from '@iconify/react';
 import { useIncidents } from '@/app/hooks/useIncidents';
 import { IncidentCategory, IncidentSeverity, Location } from '@/app/types';
 import Map from './Map';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface IncidentReportFormProps {
   onSubmit?: () => void;
@@ -29,6 +30,7 @@ const categories: IncidentCategory[] = ['Fire', 'Flood', 'Medical', 'Supply', 'O
 const severities: IncidentSeverity[] = ['Low', 'Medium', 'High', 'Critical'];
 
 export default function IncidentReportForm({ onSubmit, onCancel }: IncidentReportFormProps) {
+  const { t } = useLanguage();
   const { createIncident } = useIncidents();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -62,7 +64,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
       }, 100);
     } catch (err) {
       console.error("Error accessing camera:", err);
-      setErrors(prev => ({ ...prev, camera: 'Could not access camera. Please allow permissions.' }));
+      setErrors(prev => ({ ...prev, camera: t("incidents.errors.camera_error") }));
       setIsCameraActive(false);
     }
   };
@@ -122,25 +124,25 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
     const newErrors: Record<string, string> = {};
 
     if (!formData.category) {
-      newErrors.category = 'Please select an incident category';
+      newErrors.category = t("incidents.errors.select_category");
     }
 
     if (!formData.severity) {
-      newErrors.severity = 'Please select severity level';
+      newErrors.severity = t("incidents.errors.select_severity");
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = 'Please provide a description';
+      newErrors.description = t("incidents.errors.provide_description");
     } else if (formData.description.trim().length < 10) {
-      newErrors.description = 'Description must be at least 10 characters';
+      newErrors.description = t("incidents.errors.description_min_length");
     }
 
     if (!formData.location) {
-      newErrors.location = 'Please select a location on the map';
+      newErrors.location = t("incidents.errors.select_location");
     }
 
     if (formData.estimatedAffected && (isNaN(Number(formData.estimatedAffected)) || Number(formData.estimatedAffected) <= 0)) {
-      newErrors.estimatedAffected = 'Please enter a valid number';
+      newErrors.estimatedAffected = t("incidents.errors.invalid_number");
     }
 
     setErrors(newErrors);
@@ -179,11 +181,11 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         setImageFile(null);
         onSubmit?.();
       } else {
-        setErrors({ submit: 'Failed to submit incident report. Please try again.' });
+        setErrors({ submit: t("incidents.errors.submit_failed") });
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      setErrors({ submit: 'An error occurred while submitting the report.' });
+      setErrors({ submit: t("incidents.errors.generic_error") });
     } finally {
       setIsSubmitting(false);
     }
@@ -216,8 +218,8 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
             <Icon icon="mdi:alert-circle" className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Report Incident</h2>
-            <p className="text-sm text-gray-500">Provide details about the emergency situation</p>
+            <h2 className="text-xl font-semibold text-gray-900">{t("incidents.report_new")}</h2>
+            <p className="text-sm text-gray-500">{t("incidents.details_subtitle")}</p>
           </div>
         </div>
         {onCancel && (
@@ -234,7 +236,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Category Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            <span className="text-red-500">*</span> Incident Category
+            <span className="text-red-500">*</span> {t("incidents.category_label")}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {categories.map((category) => (
@@ -249,7 +251,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                   : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
                   }`}
               >
-                {category}
+                {t(`incidents.types.${category}`)}
               </motion.button>
             ))}
           </div>
@@ -261,7 +263,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Severity Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            <span className="text-red-500">*</span> Severity Level
+            <span className="text-red-500">*</span> {t("incidents.severity_label")}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {severities.map((severity) => (
@@ -276,7 +278,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                   : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
                   }`}
               >
-                {severity}
+                {t(`incidents.priorities.${severity.toLowerCase()}`)}
               </motion.button>
             ))}
           </div>
@@ -288,14 +290,14 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Description */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-            <span className="text-red-500">*</span> Description
+            <span className="text-red-500">*</span> {t("incidents.description_label")}
           </label>
           <textarea
             id="description"
             rows={4}
             value={formData.description}
             onChange={(e) => handleInputChange('description', e.target.value)}
-            placeholder="Provide detailed information about the incident..."
+            placeholder={t("incidents.description_placeholder")}
             className={`block w-full rounded-lg border shadow-sm px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.description ? 'border-red-300' : 'border-gray-300'
               }`}
           />
@@ -303,7 +305,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
             {errors.description ? (
               <p className="text-sm text-red-600">{errors.description}</p>
             ) : (
-              <p className="text-sm text-gray-500">Minimum 10 characters</p>
+              <p className="text-sm text-gray-500">{t("incidents.min_chars")}</p>
             )}
             <p className="text-sm text-gray-400">{formData.description.length}/500</p>
           </div>
@@ -312,7 +314,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Image Input Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Attachment (Image)
+            {t("incidents.attachment_label")}
           </label>
 
           <div className="flex space-x-4 mb-3">
@@ -328,7 +330,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                 }`}
             >
               <Icon icon="mdi:upload" className="w-4 h-4" />
-              Upload File
+              {t("incidents.upload_file")}
             </button>
             <button
               type="button"
@@ -342,7 +344,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                 }`}
             >
               <Icon icon="mdi:camera" className="w-4 h-4" />
-              Take Photo
+              {t("incidents.take_photo")}
             </button>
           </div>
 
@@ -363,18 +365,16 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                   <div className="text-sm text-gray-600">
                     <Icon icon="mdi:check-circle" className="mx-auto h-8 w-8 text-green-500 mb-2" />
                     <span className="font-medium text-green-600">{imageFile.name}</span>
-                    <p className="text-xs text-gray-400 mt-1">Click to change</p>
+                    <p className="text-xs text-gray-400 mt-1">{t("incidents.retake")}</p>
                   </div>
                 ) : (
                   <>
                     <Icon icon="mdi:image-plus" className="mx-auto h-12 w-12 text-gray-400" />
                     <div className="flex text-sm text-gray-600 justify-center">
                       <span className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                        Upload a file
+                        {t("incidents.upload_file")}
                       </span>
-                      <p className="pl-1">or drag and drop</p>
                     </div>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                   </>
                 )}
               </div>
@@ -390,7 +390,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 mx-auto"
                   >
                     <Icon icon="mdi:camera" className="w-4 h-4" />
-                    Start Camera
+                    {t("incidents.start_camera")}
                   </button>
                 </div>
               )}
@@ -409,7 +409,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                       type="button"
                       onClick={capturePhoto}
                       className="w-14 h-14 rounded-full border-4 border-blue-500 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors shadow-lg"
-                      title="Capture Photo"
+                      title={t("incidents.take_photo")}
                     >
                       <div className="w-10 h-10 rounded-full bg-blue-500"></div>
                     </button>
@@ -434,7 +434,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                   <div className="p-4 bg-white border-t flex justify-between items-center">
                     <div className="flex items-center gap-2 text-green-600">
                       <Icon icon="mdi:check-circle" className="w-5 h-5" />
-                      <span className="font-medium text-sm">Photo Captured</span>
+                      <span className="font-medium text-sm">{t("incidents.photo_captured")}</span>
                     </div>
                     <button
                       type="button"
@@ -444,7 +444,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                       }}
                       className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200"
                     >
-                      Retake
+                      {t("incidents.retake")}
                     </button>
                   </div>
                 </div>
@@ -459,7 +459,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Location */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            <span className="text-red-500">*</span> Location
+            <span className="text-red-500">*</span> {t("incidents.location_label")}
           </label>
           {formData.location ? (
             <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -467,7 +467,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                 <div>
                   <div className="flex items-center space-x-2">
                     <Icon icon="mdi:map-marker" className="w-5 h-5 text-green-600" />
-                    <span className="text-sm font-medium text-green-800">Location Selected</span>
+                    <span className="text-sm font-medium text-green-800">{t("incidents.location_selected")}</span>
                   </div>
                   <p className="text-sm text-green-700 mt-1">
                     Lat: {formData.location.lat.toFixed(4)}, Lon: {formData.location.lon.toFixed(4)}
@@ -478,7 +478,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                   onClick={() => setShowMap(true)}
                   className="text-sm text-green-600 hover:text-green-800 font-medium"
                 >
-                  Change
+                  {t("common.change")}
                 </button>
               </div>
             </div>
@@ -492,7 +492,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
                 }`}
             >
               <Icon icon="mdi:map-marker-plus" className="w-8 h-8 mx-auto mb-2" />
-              <p className="font-medium">Click to select location on map</p>
+              <p className="font-medium">{t("incidents.location_placeholder")}</p>
             </button>
           )}
           {errors.location && (
@@ -503,7 +503,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
         {/* Estimated Affected */}
         <div>
           <label htmlFor="estimatedAffected" className="block text-sm font-medium text-gray-700 mb-2">
-            Estimated People Affected (Optional)
+            {t("incidents.affected_label")}
           </label>
           <input
             type="number"
@@ -511,7 +511,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
             min="1"
             value={formData.estimatedAffected}
             onChange={(e) => handleInputChange('estimatedAffected', e.target.value)}
-            placeholder="Enter number of people affected"
+            placeholder={t("incidents.affected_placeholder")}
             className={`block w-full rounded-lg border shadow-sm px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${errors.estimatedAffected ? 'border-red-300' : 'border-gray-300'
               }`}
           />
@@ -538,7 +538,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
               onClick={onCancel}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancel
+              {t("incidents.cancel")}
             </button>
           )}
           <motion.button
@@ -554,10 +554,10 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
             {isSubmitting ? (
               <div className="flex items-center space-x-2">
                 <Icon icon="mdi:loading" className="w-4 h-4 animate-spin" />
-                <span>Submitting...</span>
+                <span>{t("incidents.submitting")}</span>
               </div>
             ) : (
-              'Submit Report'
+              t("incidents.submit_report")
             )}
           </motion.button>
         </div>
@@ -579,7 +579,7 @@ export default function IncidentReportForm({ onSubmit, onCancel }: IncidentRepor
               className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
             >
               <div className="flex items-center justify-between p-4 border-b">
-                <h3 className="text-lg font-semibold text-gray-900">Select Incident Location</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{t("incidents.select_location_title")}</h3>
                 <button
                   onClick={() => setShowMap(false)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"

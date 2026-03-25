@@ -15,6 +15,7 @@ import { useDashboardStats } from '@/app/hooks/useDashboardStats';
 import { Incident } from '@/app/types';
 import Map from './Map';
 import IncidentReportForm from './IncidentReportForm';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // --- SUB-COMPONENTS ---
 
@@ -84,6 +85,7 @@ function IncidentRow({ incident }: { incident: Incident }) {
 // --- MAIN DASHBOARD COMPONENT ---
 
 export default function CrisisDashboard() {
+  const { t } = useLanguage();
   const { filteredIncidents, loading } = useIncidents();
   const { filteredResources, getUtilizationRate } = useResources();
   const { alerts, unacknowledgedCount } = useAlerts();
@@ -98,7 +100,7 @@ export default function CrisisDashboard() {
     ? Math.round(filteredResources.reduce((acc, r) => acc + getUtilizationRate(r), 0) / filteredResources.length)
     : 0;
 
-  if (loading) return <div className="p-8 text-center text-slate-400">Loading Dashboard...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-400">{t("common.loading_dashboard") || "Loading Dashboard..."}</div>;
 
   return (
     <div className="space-y-8 max-w-[1600px] mx-auto">
@@ -106,8 +108,8 @@ export default function CrisisDashboard() {
       {/* 1. HEADER & ACTIONS */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold font-text text-[#1B2559]">Details of Mumbai</h2>
-          <p className="text-slate-500 text-sm mt-1 font-medium">here you can track the incidents and resources in your city</p>
+          <h2 className="text-2xl font-bold font-text text-[#1B2559]">{t("dashboard.details_title")}</h2>
+          <p className="text-slate-500 text-sm mt-1 font-medium">{t("dashboard.track_subtitle")}</p>
         </div>
 
         <div className="flex gap-3">
@@ -117,7 +119,7 @@ export default function CrisisDashboard() {
             className="px-4 py-2 border-slate-200 text-white bg-[#0EA5E9] rounded-lg text-sm font-medium hover:bg-slate-600  shadow-lg shadow-slate-200 hover:shadow-xl transition-all flex items-center gap-2"
           >
             <Icon icon="mdi:alert-plus " className="w-4 h-4" />
-            Report Incident
+            {t("incidents.report_new")}
           </button>
         </div>
       </div>
@@ -125,7 +127,7 @@ export default function CrisisDashboard() {
       {/* 2. STATS GRID (Colored Cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Active Incidents"
+          title={t("dashboard.stats_active")}
           value={stats ? stats.totalActiveIncidents : '-'}
           icon="mdi:alert-circle-outline"
           color="text-white"
@@ -135,7 +137,7 @@ export default function CrisisDashboard() {
           trend={12}
         />
         <StatCard
-          title="Critical Incidents"
+          title={t("dashboard.stats_critical")}
           value={stats ? stats.totalCriticalIncidents : '-'}
           icon="mdi:fire"
           color="text-[#0EA5E9]"
@@ -143,7 +145,7 @@ export default function CrisisDashboard() {
           trend={-5}
         />
         <StatCard
-          title="Total Agencies"
+          title={t("dashboard.stats_agencies")}
           value={stats ? stats.totalAgencies : '-'}
           icon="mdi:domain"
           color="text-[#0EA5E9]"
@@ -152,7 +154,7 @@ export default function CrisisDashboard() {
           trend={8}
         />
         <StatCard
-          title="Total Volunteers"
+          title={t("dashboard.stats_volunteers")}
           value={stats ? stats.totalVolunteers : '-'}
           icon="mdi:account-group"
           color="text-[#0EA5E9]"
@@ -184,14 +186,14 @@ export default function CrisisDashboard() {
           {/* CREATIVE SECTION 1: ALERT CARDS */}
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-end px-1">
-              <h3 className="font-bold text-[#1B2559] text-lg font-text">Live Alerts</h3>
-              <span className="text-xs font-bold text-[#0EA5E9] bg-sky-50 px-2 py-1 rounded-lg">LIVE FEED</span>
+              <h3 className="font-bold text-[#1B2559] text-lg font-text">{t("dashboard.live_alerts")}</h3>
+              <span className="text-xs font-bold text-[#0EA5E9] bg-sky-50 px-2 py-1 rounded-lg">{t("dashboard.live_feed")}</span>
             </div>
 
             <div className="space-y-3">
               {filteredIncidents.length === 0 ? (
                 <div className="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center text-slate-400 text-sm">
-                  All clear. No active incidents.
+                  {t("dashboard.all_clear")}
                 </div>
               ) : (
                 filteredIncidents.slice(0, 4).map((incident, index) => (

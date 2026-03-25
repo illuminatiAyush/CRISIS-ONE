@@ -1,22 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   /* Government Theme Colors */
   --gov-navy: #0f172a;
   --gov-blue: #1e3a8a;
   --gov-orange: #ea580c;
+  --card: #ffffff;
+  --border: #e2e8f0;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --gov-navy: #f8fafc;
+  --gov-blue: #3b82f6;
+  --gov-orange: #fb923c;
+  --card: #0f172a;
+  --border: #1e293b;
 }
 
 body {
-  background: radial-gradient(circle at 0% 0%, rgba(234, 88, 12, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 100% 0%, rgba(30, 58, 138, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(234, 88, 12, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(30, 58, 138, 0.05) 0%, transparent 50%),
-    #f8fafc;
+  background: var(--background);
   color: var(--foreground);
   background-attachment: fixed;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: Keep the subtle gradients for dark mode too */
+.dark body {
+  background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(251, 146, 60, 0.05) 0%, transparent 50%),
+    #020617;
 }
 
 @layer utilities {
@@ -47,4 +63,30 @@ body {
       transform: skewX(-12deg) translateX(200%);
     }
   }
+}
+
+/* Accessibility Styles */
+html.a11y-high-contrast {
+  filter: contrast(1.2) saturate(1.1);
+}
+
+html.a11y-high-contrast.dark {
+  filter: contrast(1.5) brightness(1.1) saturate(1.2);
+}
+
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-font-large {
+  font-size: 112.5% !important; /* 18px base */
+}
+
+html.a11y-font-xlarge {
+  font-size: 125% !important; /* 20px base */
 }

@@ -42,7 +42,7 @@ const GovernmentHeader = () => {
                                     Crisis<span className="text-blue-500">One</span>
                                 </span>
                                 <div className="hidden sm:block ml-3 px-2 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">
-                                    Intelligence
+                                    {t("nav.intelligence") || "Intelligence"}
                                 </div>
                             </Link>
                         </div>
@@ -98,9 +98,8 @@ const GovernmentHeader = () => {
                     <div className="lg:hidden bg-slate-900 border-t border-slate-800 absolute w-full shadow-lg">
                         <div className="px-4 py-4 space-y-3">
                             <Link href="/dashboard" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">{t("nav.dashboard")}</Link>
-                            <Link href="/audits" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Audits</Link>
-                            <Link href="/data" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Data</Link>
-                            <Link href="/about" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">About</Link>
+                            <Link href="/community" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">{t("nav.community")}</Link>
+                            <Link href="/agencies" className="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">{t("nav.agencies")}</Link>
                             <div className="border-t border-slate-800 pt-3 mt-2 flex flex-col space-y-2">
                                 <Link href="/login" className="w-full text-center bg-slate-800 text-slate-200 px-4 py-2 rounded-md text-sm font-medium">
                                     {t("nav.login")}
@@ -126,18 +125,18 @@ const GovernmentHeader = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
                         </span>
-                        <span className="text-xs font-bold text-orange-500 uppercase tracking-widest">Latest Updates</span>
+                        <span className="text-xs font-bold text-orange-500 uppercase tracking-widest">{t("nav.updates") || "Latest Updates"}</span>
                     </div>
 
                     <div className="overflow-hidden relative w-full mask-linear-fade">
                         <div className="animate-marquee whitespace-nowrap text-xs md:text-sm font-medium text-slate-400 inline-block">
-                            <span className="mx-6">📢 <span className="text-white">Heavy Rainfall Alert:</span> Red alert issues for coastal districts in Kerala. Teams deployed.</span>
+                            <span className="mx-6">📢 <span className="text-white">{t("ticker.alert1_title") || "Heavy Rainfall Alert:"}</span> {t("ticker.alert1_body") || "Red alert issues for coastal districts in Kerala. Teams deployed."}</span>
                             <span className="mx-6 font-light opacity-30">|</span>
-                            <span className="mx-6">📄 <span className="text-white">Audit Report 2025:</span> Infrastructure integrity report for Sector 7 bridges is now available for public review.</span>
+                            <span className="mx-6">📄 <span className="text-white">{t("ticker.alert2_title") || "Audit Report 2025:"}</span> {t("ticker.alert2_body") || "Infrastructure integrity report for Sector 7 bridges is now available for public review."}</span>
                             <span className="mx-6 font-light opacity-30">|</span>
-                            <span className="mx-6">🚀 <span className="text-white">New Feature:</span> Citizens can now upload video evidence for rapid incident verification.</span>
+                            <span className="mx-6">🚀 <span className="text-white">{t("ticker.alert3_title") || "New Feature:"}</span> {t("ticker.alert3_body") || "Citizens can now upload video evidence for rapid incident verification."}</span>
                             <span className="mx-6 font-light opacity-30">|</span>
-                            <span className="mx-6">⚠️ <span className="text-white">Traffic Advisory:</span> NH-44 partially closed for maintenance. Please take alternate routes.</span>
+                            <span className="mx-6">⚠️ <span className="text-white">{t("ticker.alert4_title") || "Traffic Advisory:"}</span> {t("ticker.alert4_body") || "NH-44 partially closed for maintenance. Please take alternate routes."}</span>
                         </div>
                     </div>
                 </div>

@@ -39,10 +39,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string): string => {
-    const translation = dictionaries[language]?.[key];
-    if (!translation) {
-      // Fallback to english, then to key itself
-      return dictionaries["en"]?.[key] || key;
+    const keys = key.split(".");
+    let translation: any = dictionaries[language];
+    
+    for (const k of keys) {
+      translation = translation?.[k];
+    }
+
+    if (typeof translation !== "string") {
+      // Fallback to english
+      let fallback: any = dictionaries["en"];
+      for (const k of keys) {
+        fallback = fallback?.[k];
+      }
+      return typeof fallback === "string" ? fallback : key;
     }
     return translation;
   };

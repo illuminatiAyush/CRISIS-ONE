@@ -7,27 +7,40 @@ export async function GET(req: NextRequest) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("sb-access-token")?.value;
-    const supabaseAdmin = await createAdmin();
 
-    let userData: any = null;
-    let userError: any = null;
-
+    // --- TEST BYPASS: return fake profile without any DB call ---
     if (token?.startsWith("test-session-")) {
       try {
         const payloadBase64 = token.replace("test-session-", "");
-        userData = JSON.parse(Buffer.from(payloadBase64, 'base64').toString());
-        console.log("[TEST BYPASS] Recognized session for:", userData.email);
+        const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString());
+        console.log("[TEST BYPASS] Recognized session for:", decoded.email);
+
+        const fakeName = (decoded.email?.split('@')[0] || 'TestUser');
+        const fakeProfile = {
+          id: decoded.id,
+          email: decoded.email,
+          role: decoded.role || "citizen",
+          verified: true,
+          full_name: fakeName.charAt(0).toUpperCase() + fakeName.slice(1),
+        };
+
+        return NextResponse.json({
+          user: { id: decoded.id, email: decoded.email },
+          profile: fakeProfile,
+          status: 200
+        });
       } catch (e) {
-        userError = { message: "Invalid test token" };
+        return NextResponse.json(
+          { user: null, profile: null, error: "Invalid test token" },
+          { status: 401 }
+        );
       }
-    } else {
-      // Create server client that reads cookies from the request
-      const supabase = await createSupabaseServerClient();
-      // Get the currently authenticated user from the cookie session
-      const { data: userDataResp, error: err } = await supabase.auth.getUser();
-      userData = userDataResp?.user;
-      userError = err;
     }
+
+    // --- STANDARD FLOW for real users ---
+    const supabase = await createSupabaseServerClient();
+    const { data: userDataResp, error: userError } = await supabase.auth.getUser();
+    const userData = userDataResp?.user;
 
     if (userError || !userData) {
       return NextResponse.json(
@@ -38,9 +51,8 @@ export async function GET(req: NextRequest) {
 
     console.log("User:", userData);
 
-    //Fetch the user's profile (Using admin client to bypass RLS for test users if needed, 
-    //though RLS should work if we have a valid ID in the profiles table)
-    const { data: profileData, error: profileError } = await supabaseAdmin!
+    const supabaseAdmin = createAdmin();
+    const { data: profileData, error: profileError } = await supabaseAdmin
       .from("profiles")
       .select("*")
       .eq("id", userData.id)
