@@ -14,11 +14,14 @@ function getEnvironmentVariables() {
 
 export async function createSupabaseServerClient(access_token?: string) {
   const { supabaseUrl, supabaseAnonKey } = getEnvironmentVariables();
-  if (!supabaseUrl || !supabaseAnonKey) return null;
   
+  // Use dummy values if missing to avoid build-time crashes and TS errors
+  const effectiveUrl = supabaseUrl || "https://placeholder-project.supabase.co";
+  const effectiveKey = supabaseAnonKey || "dummy-key";
+
   const cookieStore = await cookies();
 
-  return createServerClient(supabaseUrl, supabaseAnonKey, {
+  return createServerClient(effectiveUrl, effectiveKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

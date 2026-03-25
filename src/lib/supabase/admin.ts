@@ -1,17 +1,19 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-export const createAdmin = (): SupabaseClient | undefined => {
+export const createAdmin = (): SupabaseClient => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co";
+  const key = process.env.NEXT_PRIVATE_SERVICE_ROLE_KEY || "dummy-service-role-key";
+
   if (
     !process.env.NEXT_PRIVATE_SERVICE_ROLE_KEY ||
     !process.env.NEXT_PUBLIC_SUPABASE_URL
   ) {
-    console.error("Supabase keys not found");
-    return;
+    console.warn("WARNING: Supabase admin keys not found. Using dummy client.");
   }
 
   const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PRIVATE_SERVICE_ROLE_KEY!,
+    url,
+    key,
     {
       auth: {
         autoRefreshToken: true,

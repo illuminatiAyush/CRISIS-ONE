@@ -41,7 +41,8 @@ export const POST = withUser(async (req: NextRequest, user) => {
                 // Send Rejection Email
                 try {
                     const transporter = (await import('@/lib/nodemailer')).default;
-                    await transporter.sendMail({
+                    if (transporter) {
+                        await transporter.sendMail({
                         from: process.env.SMTP_USER,
                         to: agencyData.agency_email,
                         subject: `Agency Registration Update: ${agencyData.agency_name}`,
@@ -59,6 +60,7 @@ export const POST = withUser(async (req: NextRequest, user) => {
                             </div>
                         `
                     });
+                    }
                 } catch (emailError) {
                     console.error("Failed to send rejection email:", emailError);
                     // We continue even if email fails, or we could return error.
