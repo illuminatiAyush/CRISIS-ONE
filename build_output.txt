@@ -1,0 +1,33 @@
+
+> crisis-one@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\ritik\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\ritik\Downloads\RDians-main\CrisisOne Main\CrisisOne\package-lock.json
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.4s
+  Running TypeScript ...
+  Collecting page data using 23 workers ...
+WARNING: SMTP environment variables are not set. Email functionality will be disabled.
+WARNING: SMTP environment variables are not set. Email functionality will be disabled.
+WARNING: SMTP environment variables are not set. Email functionality will be disabled.
+  Generating static pages using 23 workers (0/40) ...
+WARNING: SMTP environment variables are not set. Email functionality will be disabled.
+Error: useLanguage must be used within a LanguageProvider
+    at A (C:\Users\ritik\Downloads\RDians-main\CrisisOne Main\CrisisOne\.next\server\chunks\ssr\f1e96_next_3fa93842._.js:1:44965)
+    at F (C:\Users\ritik\Downloads\RDians-main\CrisisOne Main\CrisisOne\.next\server\chunks\ssr\f1e96_next_3fa93842._.js:1:46990)
+Error occurred prerendering page "/HomePage/HomePage". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: useLanguage must be used within a LanguageProvider
+    at A (C:\Users\ritik\Downloads\RDians-main\CrisisOne Main\CrisisOne\.next\server\chunks\ssr\f1e96_next_3fa93842._.js:1:44965)
+    at F (C:\Users\ritik\Downloads\RDians-main\CrisisOne Main\CrisisOne\.next\server\chunks\ssr\f1e96_next_3fa93842._.js:1:46990)
+Export encountered an error on /HomePage/HomePage, exiting the build.
+  Generating static pages using 23 workers (10/40) 
+⨯ Next.js build worker exited with code: 1 and signal: null

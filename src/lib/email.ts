@@ -6,19 +6,23 @@ const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
 const FROM_EMAIL = process.env.FROM_EMAIL; 
 
-if (!SMTP_HOST || !SMTP_PORT || !SMTP_PASS || !FROM_EMAIL) {
-  throw new Error("SMTP environment variables are not set!");
+const isSmtpConfigured = !!(SMTP_HOST && SMTP_PORT && SMTP_PASS && FROM_EMAIL);
+
+if (!isSmtpConfigured) {
+  console.warn("WARNING: SMTP environment variables are not set. Email functionality will be disabled.");
 }
 
-export const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: SMTP_PORT === 465, // true for 465, false for other ports
-  auth: {
-    user: FROM_EMAIL,
-    pass: SMTP_PASS,
-  },
-});
+export const transporter = isSmtpConfigured 
+  ? nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: {
+        user: FROM_EMAIL,
+        pass: SMTP_PASS,
+      },
+    })
+  : null;
 
 
 export const sendEmail = async ({
@@ -30,6 +34,11 @@ export const sendEmail = async ({
   subject: string;
   html: string;
 }) => {
+  if (!transporter) {
+    console.warn("WARNING: SMTP transporter is not configured. Email will not be sent to:", to);
+    return null;
+  }
+
   try {
     const info = await transporter.sendMail({
       from: FROM_EMAIL,
