@@ -13,3 +13,18 @@
 - Environments: .env
 
   Creating an optimized production build ...
+✓ Compiled successfully in 5.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/api/admin/assign-incident/route.ts:10:37
+Type error: 'supabase' is possibly 'null'.
+
+[0m [90m  8 |[39m
+ [90m  9 |[39m     [90m// Authorization[39m
+[31m[1m>[22m[39m[90m 10 |[39m     [36mconst[39m { data[33m:[39m profile } [33m=[39m [36mawait[39m supabase
+ [90m    |[39m                                     [31m[1m^[22m[39m
+ [90m 11 |[39m       [33m.[39m[36mfrom[39m([32m"profiles"[39m)
+ [90m 12 |[39m       [33m.[39mselect([32m"role"[39m)
+ [90m 13 |[39m       [33m.[39meq([32m"id"[39m[33m,[39m user[33m.[39mid)[0m
+Next.js build worker exited with code: 1 and signal: null
