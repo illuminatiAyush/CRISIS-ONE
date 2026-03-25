@@ -1,0 +1,22 @@
+{
+  "nav.dashboard": "Dashboard",
+  "nav.community": "Community",
+  "nav.agencies": "Agencies",
+  "nav.login": "Login",
+  "nav.register": "Register",
+  "hero.title": "Disaster Response Infrastructure",
+  "hero.subtitle": "Next-generation citizen reporting and agency coordination for rapid crisis deployment.",
+  "hero.cta": "Report an Issue",
+  "hero.secondary": "View Live Map",
+  "features.realtime.title": "Real-Time Tracking",
+  "features.realtime.desc": "Monitor active emergencies as they happen with continuous updates.",
+  "features.smart.title": "Smart Routing",
+  "features.smart.desc": "Our AI engine connects incidents directly to the nearest available units.",
+  "features.intel.title": "Actionable Intel",
+  "features.intel.desc": "Get rich analytics and predictive reports to manage resources efficiently.",
+  "a11y.panel": "Accessibility Panel",
+  "a11y.highContrast": "High Contrast",
+  "a11y.reduceMotion": "Reduce Motion",
+  "a11y.fontSize": "Font Size",
+  "a11y.reset": "Reset Settings"
+}

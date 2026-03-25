@@ -1,0 +1,6 @@
+id,created_at,email,role,verified,otp,otp_expires_at,
+132955d1-7d15-451d-abb7-3d66ee2d6c1f,2026-01-20 15:00:20.665698+00,volunteer@gmail.com, true, volunteer,NULL
+1fcd385c-4337-4ded-95fa-f5eb7d2cb193,2026-01-20 15:00:20.665698+00,citizen@gmail.com, true, citizen,NULL
+5ad8b7a8-84ac-4337-941e-c5b58538d5e3,2026-01-20 15:00:20.665698+00,admin@gmail.com, true, admin,NULL
+9ca36b8a-58ca-416e-b2ae-c1b6a23e46e4,2026-01-20 15:00:20.665698+00,agency@gmail.com, true, agency,NULL
+dc1c12ed-20c8-4871-95ac-94ae1c7bf7ee,2026-01-20 15:00:20.665698+00,coordinator@gmail.com, true, coordinator,NULL
