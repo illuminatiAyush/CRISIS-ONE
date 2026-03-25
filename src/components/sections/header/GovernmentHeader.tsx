@@ -36,14 +36,14 @@ const GovernmentHeader = () => {
 
                         {/* Logo Section */}
                         {/* Logo Section */}
-                        <div className="flex items-center space-x-4">
-                            <Link href="/" className="relative w-32 h-12 md:w-70 md:h-14 flex-shrink-0 cursor-pointer">
-                                {/* Scaling image to remove visual padding since auto-crop verified full canvas usage */}
-                                <img
-                                    src="/icon/logo.png"
-                                    alt="CrisisOne Logo"
-                                    className="w-full h-full object-contain scale-[1.35] origin-center"
-                                />
+                        <div className="flex items-center">
+                            <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+                                <span className="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase italic">
+                                    Crisis<span className="text-blue-500">One</span>
+                                </span>
+                                <div className="hidden sm:block ml-3 px-2 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">
+                                    Intelligence
+                                </div>
                             </Link>
                         </div>
 
