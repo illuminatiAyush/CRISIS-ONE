@@ -90,14 +90,14 @@ export const signInWithGoogle = createAsyncThunk("auth/google", async () => {
 
 export const signIn = createAsyncThunk<
   User,
-  { email: string; password: string },
+  { email: string; password: string; role: string },
   { rejectValue: string }
 >(
   "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, role }, { rejectWithValue }) => {
     try {
       // Call your server API for login
-      const res = await axios.post("/api/auth/login", { email, password });
+      const res = await axios.post("/api/auth/login", { email, password, role });
 
       // If OTP not verified
       if (res.data.error === "OTP not verified") {

@@ -31,14 +31,21 @@ const LoginForm = ({ role, onBack }: Props) => {
       return false;
     }
 
-    // Email validation regex
+    // RELAXED VALIDATION FOR TESTING
+    // If it's a gmail, we allow any password
+    if (email.endsWith("@gmail.com")) {
+      setError("");
+      return true;
+    }
+
+    // Email validation regex (standard)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
     if (!emailRegex.test(email)) {
       setError("Invalid email format");
       return false;
     }
 
-    // Password validation regex:
+    // Password validation regex: (Only for non-gmail during testing if desired)
     // Minimum 6 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special character
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
@@ -60,13 +67,10 @@ const LoginForm = ({ role, onBack }: Props) => {
       if (!validate()) return;
 
       // Dispatch signIn with correct argument shape
-      const user: any = await dispatch(signIn({ email, password }));
-      if (role !== user?.payload.role) {
-        setError("Wrong role selected")
-        return
-      }
+      const user: any = await dispatch(signIn({ email, password, role }));
+      
       if (user.error) {
-        setError(error);
+        setError(user.error.message || "Invalid credentials");
         return;
       }
       // Fix type errors by safely handling possibly missing properties
@@ -123,7 +127,7 @@ const LoginForm = ({ role, onBack }: Props) => {
       {/* EMAIL */}
       <input
         type="email"
-        placeholder="Email"
+        placeholder="Enter your Gmail (e.g. test@gmail.com)"
         className="w-full mb-4 px-4 py-2 border rounded-md
                    focus:outline-none focus:ring-2 focus:ring-blue-400"
         onChange={(e) => {
@@ -134,7 +138,7 @@ const LoginForm = ({ role, onBack }: Props) => {
       {/* PASSWORD */}
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Any password works for testing"
         className="w-full mb-6 px-4 py-2 border rounded-md
                    focus:outline-none focus:ring-2 focus:ring-blue-400"
         onChange={(e) => {
